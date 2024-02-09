@@ -40,6 +40,7 @@ export function Home() {
         }}
         my={10}
         maxH={10}
+        minH={10}
       />
 
       <VStack px={8}>
@@ -66,6 +67,8 @@ export function Home() {
         />
 
       </VStack>
+
+      
     </VStack>
   );
 }

@@ -9,6 +9,11 @@ import { UserPhoto } from '@components/UserPhoto';
 import { Input } from '@components/Input';
 import { Button } from '@components/Button';
 
+type FileInfoProps = FileSystem.FileInfo & {
+  size: number,
+  md5?: string | undefined,
+  modificationTime:number,
+}
 
 const PHOTO_SIZE = 33;
 
@@ -34,11 +39,13 @@ export function Profile() {
         return;
       }
 
-      if(photoSelected.uri) {
+      const [image] = photoSelected.assets
 
-        const photoInfo = await FileSystem.getInfoAsync(photoSelected.uri);
+      if(image.uri) {
+
+        const photoInfo = await FileSystem.getInfoAsync(image.uri) as FileInfoProps;
         
-        if(photoInfo.size && (photoInfo.size  / 1024 / 1024 ) > 2){
+        if(photoInfo.exists && (photoInfo.size  / 1024 / 1024 ) > 5){
           
           return toast.show({
             title: 'Essa imagem é muito grande. Escolha uma de até 5MB.',
@@ -47,7 +54,7 @@ export function Profile() {
           })
         }
 
-        setUserPhoto(photoSelected.uri);
+        setUserPhoto(image.uri);
       }
   
     } catch (error) {
